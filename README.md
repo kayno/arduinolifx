@@ -1,17 +1,16 @@
-Arduino LIFX bulb
-=================
+# Arduino LIFX bulb
 
 LIFX bulb emulator by Kayne Richens (kayno@kayno.net)
 
 Emulates a LIFX bulb. Connect an RGB LED (or LED strip via drivers) to redPin, greenPin and bluePin as you normally would on an ethernet-ready Arduino and control it from the LIFX app!
 
-Notes:
+## Notes
 - Currently you cannot control an Arduino bulb and real LIFX bulbs at the same time with the Android LIFX app. Untested with the iOS LIFX app.
 - Only one client (e.g. app) can connect to the bulb at once
 
-Setup:
+## Setup
 - Connect an RGB LED to PWM pins on your ethernet-ready arduino
-- Set the following variables in arduinolifx.ino to suit your Arduino and network environment:
+- Set the following variables in [arduinolifx.ino](arduinolifx.ino) to suit your Arduino and network environment:
  - mac (unique mac address for your arduino)
  - redPin (PWM pin for RED)
  - greenPin  (PWM pin for GREEN)
