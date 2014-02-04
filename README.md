@@ -12,11 +12,12 @@ Notes:
 Setup:
 - Connect an RGB LED to PWM pins on your ethernet-ready arduino
 - Set the following variables in arduinolifx.ino to suit your Arduino and network environment:
--- mac (unique mac address for your arduino)
--- redPin (PWM pin for RED)
--- greenPin  (PWM pin for GREEN)
--- bluePin  (PWM pin for BLUE)
+ - mac (unique mac address for your arduino)
+ - redPin (PWM pin for RED)
+ - greenPin  (PWM pin for GREEN)
+ - bluePin  (PWM pin for BLUE)
 - Connect the arduino to power and network
+- Upload the code to the arduino
 - The LED should light up (warm white) once the arduino gets a DHCP lease from your network
 - Start up the LIFX app - you should see a bulb named "Arduino bulb"
 - Control your arduino bulb from the LIFX app!
