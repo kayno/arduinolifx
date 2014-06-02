@@ -14,6 +14,7 @@
  Set the following variables below to suit your Arduino and network 
  environment:
  - mac (unique mac address for your arduino)
+ - site_mac (same as mac (above))
  - redPin (PWM pin for RED)
  - greenPin  (PWM pin for GREEN)
  - bluePin  (PWM pin for BLUE)
@@ -42,6 +43,7 @@ const boolean DEBUG = 1;
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
 byte mac[] = { 0xDE, 0xAD, 0xDE, 0xAD, 0xDE, 0xAD };
+byte site_mac[] = { 0xDE, 0xAD, 0xDE, 0xAD, 0xDE, 0xAD };
 
 // pins for the RGB LED:
 const int redPin = 3;
@@ -161,6 +163,8 @@ void loop() {
     handleRequest(request);
 
   }
+
+  Ethernet.maintain();
 
   //delay(10);
 }
@@ -443,7 +447,7 @@ unsigned int sendUDPPacket(LifxPacket &pkt) {
   Udp.write(lowByte(0x00));
   Udp.write(lowByte(0x00));
 
-  // buldAddress mac address
+  // bulbAddress mac address
   for(int i = 0; i < sizeof(mac); i++) {
     Udp.write(lowByte(mac[i]));
   }
@@ -453,8 +457,8 @@ unsigned int sendUDPPacket(LifxPacket &pkt) {
   Udp.write(lowByte(0x00));
 
   // site mac address
-  for(int i = 0; i < sizeof(mac); i++) {
-    Udp.write(lowByte(mac[i]));
+  for(int i = 0; i < sizeof(site_mac); i++) {
+    Udp.write(lowByte(site_mac[i]));
   }
 
   // reserved3
@@ -514,7 +518,7 @@ unsigned int sendTCPPacket(LifxPacket &pkt) {
   TCPBuffer[byteCount++] = lowByte(0x00);
   TCPBuffer[byteCount++] = lowByte(0x00);
 
-  // buldAddress mac address
+  // bulbAddress mac address
   for(int i = 0; i < sizeof(mac); i++) {
     TCPBuffer[byteCount++] = lowByte(mac[i]);
   }
@@ -524,8 +528,8 @@ unsigned int sendTCPPacket(LifxPacket &pkt) {
   TCPBuffer[byteCount++] = lowByte(0x00);
 
   // site mac address
-  for(int i = 0; i < sizeof(mac); i++) {
-    TCPBuffer[byteCount++] = lowByte(mac[i]);
+  for(int i = 0; i < sizeof(site_mac); i++) {
+    TCPBuffer[byteCount++] = lowByte(site_mac[i]);
   }
 
   // reserved3
@@ -584,7 +588,7 @@ void printLifxPacket(LifxPacket &pkt) {
   Serial.print(lowByte(0x00), HEX);
   Serial.print(" ");
 
-  // buldAddress mac address
+  // bulbAddress mac address
   for(int i = 0; i < sizeof(mac); i++) {
     Serial.print(lowByte(mac[i]), HEX);
     Serial.print(" ");
@@ -597,8 +601,8 @@ void printLifxPacket(LifxPacket &pkt) {
   Serial.print(" ");
 
   // site mac address
-  for(int i = 0; i < sizeof(mac); i++) {
-    Serial.print(lowByte(mac[i]), HEX);
+  for(int i = 0; i < sizeof(site_mac); i++) {
+    Serial.print(lowByte(site_mac[i]), HEX);
     Serial.print(" ");
   }
 
