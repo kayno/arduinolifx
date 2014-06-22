@@ -22,6 +22,8 @@ const unsigned int LifxProtocol_BulbCommand      = 5120;  // 0x1400
 const unsigned int LifxPacketSize      = 36;
 const unsigned int LifxPort            = 56700;  // local port to listen on
 const unsigned int LifxBulbLabelLength = 32;
+const unsigned int LifxBulbTagsLength = 8;
+const unsigned int LifxBulbTagLabelsLength = 32;
 
 const byte SERVICE_UDP = 0x01;
 const byte SERVICE_TCP = 0x02;
@@ -38,6 +40,26 @@ const byte GET_BULB_LABEL = 0x17;
 const byte SET_BULB_LABEL = 0x18;
 const byte BULB_LABEL = 0x19;
 
+const byte GET_BULB_TAGS = 0x1a;
+const byte SET_BULB_TAGS = 0x1b;
+const byte BULB_TAGS = 0x1c;
+
+const byte GET_BULB_TAG_LABELS = 0x1d;
+const byte SET_BULB_TAG_LABELS = 0x1e;
+const byte BULB_TAG_LABELS = 0x1f;
+
 const byte GET_LIGHT_STATE = 0x65;
 const byte SET_LIGHT_STATE = 0x66;
 const byte LIGHT_STATUS = 0x6b;
+
+
+#define EEPROM_BULB_LABEL_START 0 // 32 bytes long
+#define EEPROM_BULB_TAGS_START 32 // 8 bytes long
+#define EEPROM_BULB_TAG_LABELS_START 40 // 32 bytes long
+// future data for EEPROM will start at 72...
+
+#define EEPROM_CONFIG "AL1" // 3 byte identifier for this sketch's EEPROM settings
+#define EEPROM_CONFIG_START 253 // store EEPROM_CONFIG at the end of EEPROM
+
+// helpers
+#define SPACE " "
