@@ -6,15 +6,11 @@
  ethernet-ready Arduino and control it from the LIFX app!
  
  Notes:
- - Currently you cannot control an Arduino bulb and real LIFX bulbs at 
- the same time with the Android LIFX app. Untested with the iOS LIFX 
- app.
  - Only one client (e.g. app) can connect to the bulb at once
  
  Set the following variables below to suit your Arduino and network 
  environment:
  - mac (unique mac address for your arduino)
- - site_mac (same as mac (above))
  - redPin (PWM pin for RED)
  - greenPin  (PWM pin for GREEN)
  - bluePin  (PWM pin for BLUE)
@@ -520,16 +516,16 @@ void handleRequest(LifxPacket &request) {
       response.packet_type = VERSION_STATE;
       response.protocol = LifxProtocol_AllBulbsResponse;
       byte VersionData[] = { 
-        lowByte(LifxVersionVendor),
-        highByte(LifxVersionVendor),
+        lowByte(LifxBulbVendor),
+        highByte(LifxBulbVendor),
         0x00,
         0x00,
-        lowByte(LifxVersionProduct),
-        highByte(LifxVersionProduct),
+        lowByte(LifxBulbProduct),
+        highByte(LifxBulbProduct),
         0x00,
         0x00,
-        lowByte(LifxVersionVersion),
-        highByte(LifxVersionVersion),
+        lowByte(LifxBulbVersion),
+        highByte(LifxBulbVersion),
         0x00,
         0x00
         };
@@ -538,6 +534,7 @@ void handleRequest(LifxPacket &request) {
       response.data_size = sizeof(VersionData);
       sendPacket(response);
       
+      /*
       // respond again to get command (real bulbs respond twice, slightly diff data (see below)
       response.packet_type = VERSION_STATE;
       response.protocol = LifxProtocol_AllBulbsResponse;
@@ -559,6 +556,7 @@ void handleRequest(LifxPacket &request) {
       memcpy(response.data, VersionData2, sizeof(VersionData2));
       response.data_size = sizeof(VersionData2);
       sendPacket(response);
+      */
     } 
     break;
 
@@ -568,11 +566,14 @@ void handleRequest(LifxPacket &request) {
       // respond to get command
       response.packet_type = MESH_FIRMWARE_STATE;
       response.protocol = LifxProtocol_AllBulbsResponse;
-      // data comes from observed packet from a LIFX v1.5 bulb
+      // timestamp data comes from observed packet from a LIFX v1.5 bulb
       byte MeshVersionData[] = { 
         0x00, 0x2e, 0xc3, 0x8b, 0xef, 0x30, 0x86, 0x13, //build timestamp
         0xe0, 0x25, 0x76, 0x45, 0x69, 0x81, 0x8b, 0x13, //install timestamp
-        0x05, 0x00, 0x01, 0x00 //version
+        lowByte(LifxFirmwareVersionMinor),
+        highByte(LifxFirmwareVersionMinor),
+        lowByte(LifxFirmwareVersionMajor),
+        highByte(LifxFirmwareVersionMajor)
         };
 
       memcpy(response.data, MeshVersionData, sizeof(MeshVersionData));
@@ -587,11 +588,14 @@ void handleRequest(LifxPacket &request) {
       // respond to get command
       response.packet_type = WIFI_FIRMWARE_STATE;
       response.protocol = LifxProtocol_AllBulbsResponse;
-      // data comes from observed packet from a LIFX v1.5 bulb
+      // timestamp data comes from observed packet from a LIFX v1.5 bulb
       byte WifiVersionData[] = { 
         0x00, 0xc8, 0x5e, 0x31, 0x99, 0x51, 0x86, 0x13, //build timestamp
         0xc0, 0x0c, 0x07, 0x00, 0x48, 0x46, 0xd9, 0x43, //install timestamp
-        0x05, 0x00, 0x01, 0x00 //version
+        lowByte(LifxFirmwareVersionMinor),
+        highByte(LifxFirmwareVersionMinor),
+        lowByte(LifxFirmwareVersionMajor),
+        highByte(LifxFirmwareVersionMajor)
         };
 
       memcpy(response.data, WifiVersionData, sizeof(WifiVersionData));

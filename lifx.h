@@ -26,9 +26,11 @@ const unsigned int LifxBulbTagsLength = 8;
 const unsigned int LifxBulbTagLabelsLength = 32;
 
 // firmware versions, etc
-const unsigned int LifxVersionVendor = 1;
-const unsigned int LifxVersionProduct = 1;
-const unsigned int LifxVersionVersion = 1;
+const unsigned int LifxBulbVendor = 1;
+const unsigned int LifxBulbProduct = 1;
+const unsigned int LifxBulbVersion = 1;
+const unsigned int LifxFirmwareVersionMajor = 1;
+const unsigned int LifxFirmwareVersionMinor = 5;
 
 const byte SERVICE_UDP = 0x01;
 const byte SERVICE_TCP = 0x02;
