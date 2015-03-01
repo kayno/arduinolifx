@@ -46,7 +46,7 @@ const boolean DEBUG = 0;
 byte mac[] = { 
   0xDE, 0xAD, 0xDE, 0xAD, 0xDE, 0xAD };
 byte site_mac[] = { 
-  0xDE, 0xAD, 0xDE, 0xAD, 0xDE, 0xAD };
+  0x4c, 0x49, 0x46, 0x58, 0x56, 0x32 }; // spells out "LIFXV2" - version 2 of the app changes the site address to this...
 
 // pins for the RGB LED:
 const int redPin = 3;
@@ -509,6 +509,93 @@ void handleRequest(LifxPacket &request) {
       response.protocol = LifxProtocol_AllBulbsResponse;
       memcpy(response.data, bulbTagLabels, sizeof(bulbTagLabels));
       response.data_size = sizeof(bulbTagLabels);
+      sendPacket(response);
+    } 
+    break;
+
+
+  case GET_VERSION_STATE: 
+    {
+      // respond to get command
+      response.packet_type = VERSION_STATE;
+      response.protocol = LifxProtocol_AllBulbsResponse;
+      byte VersionData[] = { 
+        lowByte(LifxVersionVendor),
+        highByte(LifxVersionVendor),
+        0x00,
+        0x00,
+        lowByte(LifxVersionProduct),
+        highByte(LifxVersionProduct),
+        0x00,
+        0x00,
+        lowByte(LifxVersionVersion),
+        highByte(LifxVersionVersion),
+        0x00,
+        0x00
+        };
+
+      memcpy(response.data, VersionData, sizeof(VersionData));
+      response.data_size = sizeof(VersionData);
+      sendPacket(response);
+      
+      // respond again to get command (real bulbs respond twice, slightly diff data (see below)
+      response.packet_type = VERSION_STATE;
+      response.protocol = LifxProtocol_AllBulbsResponse;
+      byte VersionData2[] = { 
+        lowByte(LifxVersionVendor), //vendor stays the same
+        highByte(LifxVersionVendor),
+        0x00,
+        0x00,
+        lowByte(LifxVersionProduct*2), //product is 2, rather than 1
+        highByte(LifxVersionProduct*2),
+        0x00,
+        0x00,
+        0x00, //version is 0, rather than 1
+        0x00,
+        0x00,
+        0x00
+        };
+
+      memcpy(response.data, VersionData2, sizeof(VersionData2));
+      response.data_size = sizeof(VersionData2);
+      sendPacket(response);
+    } 
+    break;
+
+
+  case GET_MESH_FIRMWARE_STATE: 
+    {
+      // respond to get command
+      response.packet_type = MESH_FIRMWARE_STATE;
+      response.protocol = LifxProtocol_AllBulbsResponse;
+      // data comes from observed packet from a LIFX v1.5 bulb
+      byte MeshVersionData[] = { 
+        0x00, 0x2e, 0xc3, 0x8b, 0xef, 0x30, 0x86, 0x13, //build timestamp
+        0xe0, 0x25, 0x76, 0x45, 0x69, 0x81, 0x8b, 0x13, //install timestamp
+        0x05, 0x00, 0x01, 0x00 //version
+        };
+
+      memcpy(response.data, MeshVersionData, sizeof(MeshVersionData));
+      response.data_size = sizeof(MeshVersionData);
+      sendPacket(response);
+    } 
+    break;
+
+
+  case GET_WIFI_FIRMWARE_STATE: 
+    {
+      // respond to get command
+      response.packet_type = WIFI_FIRMWARE_STATE;
+      response.protocol = LifxProtocol_AllBulbsResponse;
+      // data comes from observed packet from a LIFX v1.5 bulb
+      byte WifiVersionData[] = { 
+        0x00, 0xc8, 0x5e, 0x31, 0x99, 0x51, 0x86, 0x13, //build timestamp
+        0xc0, 0x0c, 0x07, 0x00, 0x48, 0x46, 0xd9, 0x43, //install timestamp
+        0x05, 0x00, 0x01, 0x00 //version
+        };
+
+      memcpy(response.data, WifiVersionData, sizeof(WifiVersionData));
+      response.data_size = sizeof(WifiVersionData);
       sendPacket(response);
     } 
     break;
