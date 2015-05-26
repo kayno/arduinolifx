@@ -43,7 +43,7 @@ const byte GET_WIFI_FIRMWARE_STATE = 0x12;
 const byte WIFI_FIRMWARE_STATE = 0x13;
 
 const byte GET_POWER_STATE = 0x14;
-const byte SET_POWER_STATE = 0x15;
+const byte SET_POWER_STATE = 0x75;
 const byte POWER_STATE = 0x16;
 
 const byte GET_BULB_LABEL = 0x17;
